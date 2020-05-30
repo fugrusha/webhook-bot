@@ -1,12 +1,12 @@
 package com.telbot.backend.botapi;
 
+import com.telbot.backend.botapi.handlers.InputMessageHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +30,7 @@ public class BotStateContext {
         if (isFillingProfileState(currentBotState)) {
             return messageHandlers.get(BotState.FILLING_PROFILE);
         }
+
         return messageHandlers.get(currentBotState);
     }
 

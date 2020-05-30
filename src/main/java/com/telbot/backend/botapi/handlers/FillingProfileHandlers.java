@@ -1,7 +1,6 @@
 package com.telbot.backend.botapi.handlers;
 
 import com.telbot.backend.botapi.BotState;
-import com.telbot.backend.botapi.InputMessageHandler;
 import com.telbot.backend.cache.UserDataCache;
 import com.telbot.backend.domain.TelegramUser;
 import com.telbot.backend.service.ReplyMessageService;

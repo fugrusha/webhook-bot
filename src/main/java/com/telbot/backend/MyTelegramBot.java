@@ -30,7 +30,7 @@ public class MyTelegramBot extends TelegramWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        SendMessage replyToUser = telegramFacade.handleUpdate(update);
+        BotApiMethod<?> replyToUser = telegramFacade.handleUpdate(update);
 
         return replyToUser;
     }

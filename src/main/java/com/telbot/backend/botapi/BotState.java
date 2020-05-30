@@ -8,5 +8,7 @@ public enum BotState {
     ASK_PHONE,
     FILLING_PROFILE,
     SHOW_HELP_MENU,
-    SHOW_MAIN_MENU
+    SHOW_MAIN_MENU,
+    HAVE_A_QUESTION,
+    SHOW_CONTACTS
 }
