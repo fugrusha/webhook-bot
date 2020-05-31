@@ -54,18 +54,24 @@ public class FillingProfileHandlers implements InputMessageHandler {
             if (validationService.isValidEmailAddress(usersAnswer)) {
                 profileData.setEmail(usersAnswer);
                 replyToUser = messageService.getReplyMessage(chatId, "reply.askPhone");
+
                 userDataCache.setNewBotState(chatId, BotState.FINISH_APPLICATION);
             } else {
                 replyToUser = messageService.getReplyMessage(chatId, "reply.askRepeatEmail");
                 userDataCache.setNewBotState(chatId, BotState.ASK_PHONE);
             }
-
         }
 
         if (botState.equals(BotState.FINISH_APPLICATION)) {
-            profileData.setPhone(usersAnswer);
-            replyToUser = messageService.getReplyMessage(chatId, "reply.thanksForApplication");
-            userDataCache.setNewBotState(chatId, BotState.SHOW_MAIN_MENU);
+            if (validationService.isValidPhoneNumber(usersAnswer)) {
+                profileData.setPhone(usersAnswer);
+                replyToUser = messageService.getReplyMessage(chatId, "reply.thanksForApplication");
+
+                userDataCache.setNewBotState(chatId, BotState.SHOW_MAIN_MENU);
+            } else {
+                replyToUser = messageService.getReplyMessage(chatId, "reply.askRepeatPhone");
+                userDataCache.setNewBotState(chatId, BotState.FINISH_APPLICATION);
+            }
         }
 
         userDataCache.saveTelegramUser(chatId, profileData);

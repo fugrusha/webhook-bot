@@ -27,7 +27,7 @@ public class ValidationService {
         return true;
     }
 
-    public static boolean isValidPhoneNumber(String phoneNumber) {
+    public boolean isValidPhoneNumber(String phoneNumber) {
         return phoneNumber != null
                 && PHONE_NUMBER_PATTERN
                 .matcher(phoneNumber.replaceAll(PHONE_NUMBER_GARBAGE_REGEX, "")).matches();
