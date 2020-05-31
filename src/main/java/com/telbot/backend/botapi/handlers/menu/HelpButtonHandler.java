@@ -32,6 +32,7 @@ public class HelpButtonHandler implements InputMessageHandler {
         long chatId = inputMsg.getChatId();
 
         SendMessage replyToUser = messageService.getReplyMessage(chatId, "reply.helpButton");
+        replyToUser.setParseMode("HTML");
 
         userDataCache.setNewBotState(chatId, BotState.SHOW_MAIN_MENU);
 
