@@ -1,5 +1,6 @@
 package com.telbot.backend.botapi;
 
+import com.telbot.backend.botapi.handlers.PhoneNumberHandler;
 import com.telbot.backend.botapi.handlers.callbackquery.CallbackQueryFacade;
 import com.telbot.backend.cache.UserDataCache;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Contact;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -22,14 +22,15 @@ public class TelegramFacade {
     private BotStateContext botStateContext;
 
     @Autowired
+    private PhoneNumberHandler phoneNumberHandler;
+
+    @Autowired
     private CallbackQueryFacade callbackQueryFacade;
 
     public BotApiMethod<?> handleUpdate(Update update) {
 
-        if (update.getMessage().hasContact()) {
-            Contact contact = update.getMessage().getContact();
-
-
+        if (update.getMessage() != null && update.getMessage().hasContact()) {
+            return phoneNumberHandler.handle(update.getMessage());
         }
 
         if (update.hasCallbackQuery()) {

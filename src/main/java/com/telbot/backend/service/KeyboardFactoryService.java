@@ -61,4 +61,25 @@ public class KeyboardFactoryService {
 
         return replyKeyboardMarkup;
     }
+
+    public ReplyKeyboardMarkup getRequestContactKeyboard() {
+
+        final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(true);
+
+        List<KeyboardRow> keyboard = new ArrayList<>();
+
+        KeyboardRow row1 = new KeyboardRow();
+
+        row1.add(new KeyboardButton("Отправить мой номер")
+                .setRequestContact(true));
+
+        keyboard.add(row1);
+
+        replyKeyboardMarkup.setKeyboard(keyboard);
+
+        return replyKeyboardMarkup;
+    }
 }

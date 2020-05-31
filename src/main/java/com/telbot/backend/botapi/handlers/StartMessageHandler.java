@@ -3,13 +3,10 @@ package com.telbot.backend.botapi.handlers;
 import com.telbot.backend.botapi.BotState;
 import com.telbot.backend.cache.UserDataCache;
 import com.telbot.backend.service.KeyboardFactoryService;
-import com.telbot.backend.service.MainMenuService;
 import com.telbot.backend.service.ReplyMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Component
