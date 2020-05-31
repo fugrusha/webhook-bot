@@ -4,6 +4,7 @@ import com.telbot.backend.botapi.BotState;
 import com.telbot.backend.cache.UserDataCache;
 import com.telbot.backend.domain.TelegramUser;
 import com.telbot.backend.service.ReplyMessageService;
+import com.telbot.backend.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -17,6 +18,9 @@ public class FillingProfileHandlers implements InputMessageHandler {
 
     @Autowired
     private ReplyMessageService messageService;
+
+    @Autowired
+    private ValidationService validationService;
 
     @Override
     public SendMessage handle(Message message) {
@@ -47,9 +51,15 @@ public class FillingProfileHandlers implements InputMessageHandler {
         }
 
         if (botState.equals(BotState.ASK_PHONE)) {
-            profileData.setEmail(usersAnswer);
-            replyToUser = messageService.getReplyMessage(chatId, "reply.askPhone");
-            userDataCache.setNewBotState(chatId, BotState.FINISH_APPLICATION);
+            if (validationService.isValidEmailAddress(usersAnswer)) {
+                profileData.setEmail(usersAnswer);
+                replyToUser = messageService.getReplyMessage(chatId, "reply.askPhone");
+                userDataCache.setNewBotState(chatId, BotState.FINISH_APPLICATION);
+            } else {
+                replyToUser = messageService.getReplyMessage(chatId, "reply.askRepeatEmail");
+                userDataCache.setNewBotState(chatId, BotState.ASK_PHONE);
+            }
+
         }
 
         if (botState.equals(BotState.FINISH_APPLICATION)) {
