@@ -23,7 +23,7 @@ public class KeyboardFactoryService {
 
         InlineKeyboardButton callButton = new InlineKeyboardButton()
                 .setText("Позвонить")
-                .setCallbackData(CallbackQueryType.CALL_BUTTON.toString());
+                .setCallbackData(CallbackQueryType.CALL_BUTTON_CALLBACK.toString());
 
         List<InlineKeyboardButton> keyboardRow = new ArrayList<>();
         keyboardRow.add(writeButton);

@@ -1,10 +1,8 @@
 package com.telbot.backend.botapi.handlers.callbackquery;
 
 import com.telbot.backend.service.ReplyMessageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 import java.util.List;
@@ -27,7 +25,7 @@ public class CallbackQueryFacade {
     public BotApiMethod<?> processCallbackQuery(CallbackQuery usersQuery) {
 
         CallbackQueryType usersQueryType = CallbackQueryType
-                .valueOf(usersQuery.getData());
+                .valueOf(usersQuery.getData().split(" ")[0]);
 
         Optional<CallbackQueryHandler> queryHandler = callbackQueryHandlers
                 .stream()

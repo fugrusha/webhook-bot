@@ -23,6 +23,6 @@ public class ContactCallbackHandler implements CallbackQueryHandler {
 
     @Override
     public CallbackQueryType getHandlerQueryType() {
-        return CallbackQueryType.CALL_BUTTON;
+        return CallbackQueryType.CALL_BUTTON_CALLBACK;
     }
 }

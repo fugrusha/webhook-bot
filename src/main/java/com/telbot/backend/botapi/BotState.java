@@ -6,6 +6,7 @@ public enum BotState {
     FINISH_APPLICATION,
     ASK_EMAIL,
     ASK_PHONE,
+    ASK_DATE,
     FILLING_PROFILE,
     SHOW_HELP_MENU,
     SHOW_MAIN_MENU,

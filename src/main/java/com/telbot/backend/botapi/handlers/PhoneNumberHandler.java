@@ -38,6 +38,7 @@ public class PhoneNumberHandler {
         replyToUser.setReplyMarkup(keyboardFactory.getMainMenuKeyboard());
 
         userDataCache.setNewBotState(chatId, BotState.SHOW_MAIN_MENU);
+        userDataCache.saveTelegramUser(chatId, profileData);
 
         return replyToUser;
     }
