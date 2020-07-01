@@ -8,9 +8,6 @@ import org.springframework.util.ResourceUtils;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -58,6 +55,15 @@ public class ReplyMessageService {
 
     public BotApiMethod getWarningReplyMessage(long chatId, String replyMessage) {
         return new SendMessage(chatId, replyMessage);
+    }
+
+    public void sendMessageToChannel(String channelId, String message) {
+        SendMessage sendMessage = new SendMessage()
+                .setChatId(channelId)
+                .setText(message)
+                .enableMarkdown(true);
+
+        myTelegramBot.send(sendMessage);
     }
 
     //TODO

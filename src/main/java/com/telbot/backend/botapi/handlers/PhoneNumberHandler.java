@@ -3,6 +3,7 @@ package com.telbot.backend.botapi.handlers;
 import com.telbot.backend.botapi.BotState;
 import com.telbot.backend.cache.UserDataCache;
 import com.telbot.backend.domain.TelegramUser;
+import com.telbot.backend.service.ApplicationSenderService;
 import com.telbot.backend.service.KeyboardFactoryService;
 import com.telbot.backend.service.ReplyMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class PhoneNumberHandler {
     @Autowired
     private KeyboardFactoryService keyboardFactory;
 
+    @Autowired
+    private ApplicationSenderService applicationSenderService;
+
     public BotApiMethod<?> handle(Message inputMsg) {
         Contact contact = inputMsg.getContact();
         long chatId = inputMsg.getChatId();
@@ -39,6 +43,8 @@ public class PhoneNumberHandler {
 
         userDataCache.setNewBotState(chatId, BotState.SHOW_MAIN_MENU);
         userDataCache.saveTelegramUser(chatId, profileData);
+
+        applicationSenderService.sendToChannel(profileData);
 
         return replyToUser;
     }

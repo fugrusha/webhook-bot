@@ -6,10 +6,8 @@ import com.telbot.backend.cache.UserDataCache;
 import com.telbot.backend.service.ReplyMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendVenue;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-
-import static com.telbot.backend.domain.Constants.*;
 
 @Component
 public class ContactButtonHandler implements InputMessageHandler {
@@ -21,7 +19,7 @@ public class ContactButtonHandler implements InputMessageHandler {
     private UserDataCache userDataCache;
 
     @Override
-    public SendVenue handle(Message message) {
+    public SendMessage handle(Message message) {
         return processUserInput(message);
     }
 
@@ -30,18 +28,29 @@ public class ContactButtonHandler implements InputMessageHandler {
         return BotState.SHOW_CONTACTS;
     }
 
-    private SendVenue processUserInput(Message inputMsg) {
+//    private SendVenue processUserInput(Message inputMsg) {
+//        long chatId = inputMsg.getChatId();
+//
+//        SendVenue venue = new SendVenue()
+//                .setChatId(chatId)
+//                .setTitle(VENUE_TITLE)
+//                .setAddress(ADDRESS)
+//                .setLatitude(LATITUDE)
+//                .setLongitude(LONGITUDE);
+//
+//        userDataCache.setNewBotState(chatId, BotState.SHOW_MAIN_MENU);
+//
+//        return venue;
+//    }
+
+    private SendMessage processUserInput(Message inputMsg) {
         long chatId = inputMsg.getChatId();
 
-        SendVenue venue = new SendVenue()
-                .setChatId(chatId)
-                .setTitle(VENUE_TITLE)
-                .setAddress(ADDRESS)
-                .setLatitude(LATITUDE)
-                .setLongitude(LONGITUDE);
+        SendMessage replyToUser = messageService.getReplyMessage(chatId, "reply.contactButton");
+        replyToUser.setParseMode("HTML");
 
         userDataCache.setNewBotState(chatId, BotState.SHOW_MAIN_MENU);
 
-        return venue;
+        return replyToUser;
     }
 }

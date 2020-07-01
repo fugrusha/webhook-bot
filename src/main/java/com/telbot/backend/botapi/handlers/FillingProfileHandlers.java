@@ -3,10 +3,7 @@ package com.telbot.backend.botapi.handlers;
 import com.telbot.backend.botapi.BotState;
 import com.telbot.backend.cache.UserDataCache;
 import com.telbot.backend.domain.TelegramUser;
-import com.telbot.backend.service.CalendarKeyboardService;
-import com.telbot.backend.service.KeyboardFactoryService;
-import com.telbot.backend.service.ReplyMessageService;
-import com.telbot.backend.service.ValidationService;
+import com.telbot.backend.service.*;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,6 +27,9 @@ public class FillingProfileHandlers implements InputMessageHandler {
 
     @Autowired
     private CalendarKeyboardService calendarKeyboardService;
+
+    @Autowired
+    private ApplicationSenderService applicationSenderService;
 
     @Override
     public SendMessage handle(Message message) {
@@ -86,6 +86,8 @@ public class FillingProfileHandlers implements InputMessageHandler {
                 replyToUser.setReplyMarkup(keyboardFactory.getMainMenuKeyboard());
 
                 userDataCache.setNewBotState(chatId, BotState.SHOW_MAIN_MENU);
+
+                applicationSenderService.sendToChannel(profileData);
             } else {
                 replyToUser = messageService.getReplyMessage(chatId, "reply.askRepeatPhone");
                 replyToUser.setReplyMarkup(keyboardFactory.getRequestContactKeyboard());

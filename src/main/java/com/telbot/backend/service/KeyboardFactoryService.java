@@ -1,6 +1,7 @@
 package com.telbot.backend.service;
 
 import com.telbot.backend.botapi.handlers.callbackquery.CallbackQueryType;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -14,12 +15,15 @@ import java.util.List;
 @Service
 public class KeyboardFactoryService {
 
+    @Value("${telegram.doctor.profile}")
+    private String doctorProfile;
+
     public InlineKeyboardMarkup getInlineMessageButtons() {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton writeButton = new InlineKeyboardButton()
                 .setText("Написать")
-                .setUrl("https://t.me/fugrusha");
+                .setUrl(doctorProfile);
 
         InlineKeyboardButton callButton = new InlineKeyboardButton()
                 .setText("Позвонить")
