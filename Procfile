@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -cp target/classes:target/dependency/* com.telbot.backend.Application
+web: java $JAVA_OPTS -cp target/classes:target/dependency/* Application
