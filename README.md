@@ -1,5 +1,4 @@
-# webhook-bot
-Telegram bot with webhooks
+# Telegram webhook bot - @DentaGoBot
 
 Based on:
 - Java 13
