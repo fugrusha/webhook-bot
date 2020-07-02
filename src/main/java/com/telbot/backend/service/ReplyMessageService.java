@@ -4,13 +4,9 @@ import com.telbot.backend.MyTelegramBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-
-import java.io.File;
-import java.io.FileNotFoundException;
 
 @Service
 public class ReplyMessageService {
@@ -36,19 +32,11 @@ public class ReplyMessageService {
                 .enableMarkdown(true);
     }
 
-    public void sendPhoto(long chatId, String imageCaption, String imagePath) {
-        File image = null;
-
-        try {
-            image = ResourceUtils.getFile("classpath:" + imagePath);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
+    public void sendPhoto(long chatId, String imageCaption, String photoId) {
         SendPhoto sendPhoto = new SendPhoto()
                 .setChatId(chatId)
                 .setCaption(localeMessageService.getMessage(imageCaption))
-                .setPhoto(image);
+                .setPhoto(photoId);
 
         myTelegramBot.send(sendPhoto);
     }

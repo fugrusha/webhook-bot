@@ -59,16 +59,6 @@
             </plugin>
 
         </plugins>
-
-        <resources>
-            <resource>
-                <directory>src/resources/static/images</directory>
-                <includes>
-                    <include>*.png</include>
-                    <include>*.jpg</include>
-                </includes>
-            </resource>
-        </resources>
     </build>
 
 </project>

@@ -5,6 +5,7 @@ import com.telbot.backend.cache.UserDataCache;
 import com.telbot.backend.service.KeyboardFactoryService;
 import com.telbot.backend.service.ReplyMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -21,6 +22,9 @@ public class StartMessageHandler implements InputMessageHandler {
     @Autowired
     private UserDataCache userDataCache;
 
+    @Value("${telegram.bot.greeting.photo.id}")
+    private String photoId;
+
     @Override
     public SendMessage handle(Message message) {
         return processUsersInput(message);
@@ -34,7 +38,7 @@ public class StartMessageHandler implements InputMessageHandler {
     private SendMessage processUsersInput(Message inputMsg) {
         long chatId = inputMsg.getChatId();
 
-        messageService.sendPhoto(chatId, "reply.startMessage", "static/images/1.png");
+        messageService.sendPhoto(chatId, "reply.startMessage", photoId);
 
         SendMessage replyToUser = messageService.getReplyMessage(chatId, "reply.mainMenu");
         replyToUser.setReplyMarkup(keyboardFactoryService.getMainMenuKeyboard());
