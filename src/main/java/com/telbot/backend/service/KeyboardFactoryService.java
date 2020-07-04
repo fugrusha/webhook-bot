@@ -52,7 +52,7 @@ public class KeyboardFactoryService {
 
         KeyboardRow row1 = new KeyboardRow();
         row1.add(new KeyboardButton("Запись"));
-        row1.add(new KeyboardButton("Задать вопрос"));
+        row1.add(new KeyboardButton("Мои записи"));
 
         KeyboardRow row2 = new KeyboardRow();
         row2.add(new KeyboardButton("Контакты"));
@@ -85,5 +85,23 @@ public class KeyboardFactoryService {
         replyKeyboardMarkup.setKeyboard(keyboard);
 
         return replyKeyboardMarkup;
+    }
+
+    public InlineKeyboardMarkup getInlineButtonForVisit(String visitId, String buttonText) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+
+        InlineKeyboardButton cancelButton = new InlineKeyboardButton()
+                .setText(buttonText)
+                .setCallbackData(CallbackQueryType.CANCEL_VISIT.toString() + " " + visitId);
+
+        List<InlineKeyboardButton> keyboardRow = new ArrayList<>();
+        keyboardRow.add(cancelButton);
+
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(keyboardRow);
+
+        inlineKeyboardMarkup.setKeyboard(rowList);
+
+        return inlineKeyboardMarkup;
     }
 }

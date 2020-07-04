@@ -22,8 +22,9 @@ public class ApplicationSenderService {
         sb.append("*Surname:* ").append(userProfile.getLastName()).append("\n");
         sb.append("*Phone:* ").append(userProfile.getPhone()).append("\n");
         sb.append("*Email:* ").append(userProfile.getEmail()).append("\n");
-        sb.append("*Date:* ").append(userProfile.getApplicationDate());
+        sb.append("*Date:* ").append(userProfile.getLastDate()).append("\n");
+        sb.append("*Time:* ").append(userProfile.getLastTime());
 
-        messageService.sendMessageToChannel(channelName, sb.toString());
+        messageService.sendMessage(channelName, sb.toString());
     }
 }

@@ -8,8 +8,8 @@ public enum BotState {
     ASK_PHONE,
     ASK_DATE,
     FILLING_PROFILE,
+    MY_VISITS,
     SHOW_HELP_MENU,
     SHOW_MAIN_MENU,
-    HAVE_A_QUESTION,
     SHOW_CONTACTS
 }

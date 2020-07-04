@@ -68,8 +68,8 @@ public class TelegramFacade {
             case "Запись":
                 botState = BotState.FILLING_PROFILE;
                 break;
-            case "Задать вопрос":
-                botState = BotState.HAVE_A_QUESTION;
+            case "Мои записи":
+                botState = BotState.MY_VISITS;
                 break;
             case "Контакты":
                 botState = BotState.SHOW_CONTACTS;

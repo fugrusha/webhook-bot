@@ -3,6 +3,7 @@ package com.telbot.backend.botapi.handlers.menu;
 import com.telbot.backend.botapi.BotState;
 import com.telbot.backend.botapi.handlers.InputMessageHandler;
 import com.telbot.backend.cache.UserDataCache;
+import com.telbot.backend.service.KeyboardFactoryService;
 import com.telbot.backend.service.ReplyMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,9 @@ public class ContactButtonHandler implements InputMessageHandler {
 
     @Autowired
     private UserDataCache userDataCache;
+
+    @Autowired
+    private KeyboardFactoryService keyboardFactoryService;
 
     @Override
     public SendMessage handle(Message message) {
@@ -47,6 +51,7 @@ public class ContactButtonHandler implements InputMessageHandler {
         long chatId = inputMsg.getChatId();
 
         SendMessage replyToUser = messageService.getReplyMessage(chatId, "reply.contactButton");
+        replyToUser.setReplyMarkup(keyboardFactoryService.getInlineMessageButtons());
         replyToUser.setParseMode("HTML");
 
         userDataCache.setNewBotState(chatId, BotState.SHOW_MAIN_MENU);

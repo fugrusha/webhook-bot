@@ -63,7 +63,7 @@ public class CalendarCallbackHandler implements CallbackQueryHandler {
         } else {
             LocalDate date = parseDate(usersInput);
             TelegramUser profileData = telegramUserService.getByChatId(chatId);
-            profileData.setApplicationDate(date);
+            profileData.setLastDate(date);
             telegramUserService.saveUser(profileData);
 
             userDataCache.setNewBotState(chatId, BotState.ASK_EMAIL);

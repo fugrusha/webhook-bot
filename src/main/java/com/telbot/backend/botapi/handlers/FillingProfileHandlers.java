@@ -20,6 +20,9 @@ public class FillingProfileHandlers implements InputMessageHandler {
     private TelegramUserService telegramUserService;
 
     @Autowired
+    private VisitService visitService;
+
+    @Autowired
     private ReplyMessageService messageService;
 
     @Autowired
@@ -94,6 +97,7 @@ public class FillingProfileHandlers implements InputMessageHandler {
                 userDataCache.setNewBotState(chatId, BotState.SHOW_MAIN_MENU);
 
                 applicationSenderService.sendToChannel(profileData);
+                visitService.createVisit(profileData.getLastDate(), profileData.getLastTime(), profileData.getChatId());
             } else {
                 replyToUser = messageService.getReplyMessage(chatId, "reply.askRepeatPhone");
                 replyToUser.setReplyMarkup(keyboardFactory.getRequestContactKeyboard());

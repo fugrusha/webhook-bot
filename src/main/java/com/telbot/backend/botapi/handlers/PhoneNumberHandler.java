@@ -3,10 +3,7 @@ package com.telbot.backend.botapi.handlers;
 import com.telbot.backend.botapi.BotState;
 import com.telbot.backend.cache.UserDataCache;
 import com.telbot.backend.domain.TelegramUser;
-import com.telbot.backend.service.ApplicationSenderService;
-import com.telbot.backend.service.KeyboardFactoryService;
-import com.telbot.backend.service.ReplyMessageService;
-import com.telbot.backend.service.TelegramUserService;
+import com.telbot.backend.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -32,6 +29,9 @@ public class PhoneNumberHandler {
     @Autowired
     private ApplicationSenderService applicationSenderService;
 
+    @Autowired
+    private VisitService visitService;
+
     public BotApiMethod<?> handle(Message inputMsg) {
         Contact contact = inputMsg.getContact();
         long chatId = inputMsg.getChatId();
@@ -49,6 +49,9 @@ public class PhoneNumberHandler {
 
         telegramUserService.saveUser(profileData);
         applicationSenderService.sendToChannel(profileData);
+
+        // create visit
+        visitService.createVisit(profileData.getLastDate(), profileData.getLastTime(), profileData.getChatId());
 
         return replyToUser;
     }

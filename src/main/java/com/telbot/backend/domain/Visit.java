@@ -10,24 +10,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Setter
 @Getter
-@Document(collection = "telegram_user")
-public class TelegramUser {
+@Document(collection = "visit")
+public class Visit {
 
     @Id
     private String id;
 
-    @Indexed(unique = true)
+    private LocalDate date;
+
+    private LocalTime time;
+
+    private VisitStatus status;
+
+    @Indexed
     private long chatId;
-
-    private String name;
-
-    private String lastName;
-
-    private String email;
-
-    private String phone;
-
-    private LocalDate lastDate;
-
-    private LocalTime lastTime;
 }
