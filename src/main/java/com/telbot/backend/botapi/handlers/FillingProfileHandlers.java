@@ -17,6 +17,9 @@ public class FillingProfileHandlers implements InputMessageHandler {
     private UserDataCache userDataCache;
 
     @Autowired
+    private TelegramUserService telegramUserService;
+
+    @Autowired
     private ReplyMessageService messageService;
 
     @Autowired
@@ -49,14 +52,17 @@ public class FillingProfileHandlers implements InputMessageHandler {
         String usersAnswer = inputMsg.getText();
         long chatId = inputMsg.getChatId();
 
-        TelegramUser profileData = userDataCache.getTelegramUser(chatId);
+        TelegramUser profileData = telegramUserService.getByChatId(chatId);
+
+        if (profileData == null) {
+            profileData = telegramUserService.createUser(inputMsg.getChatId());
+        }
 
         BotState botState = userDataCache.getCurrentBotState(chatId);
 
         SendMessage replyToUser = null;
 
         if (botState.equals(BotState.ASK_DATE)) {
-            profileData.setChatId(inputMsg.getChatId());
             profileData.setName(inputMsg.getFrom().getFirstName());
             profileData.setLastName(inputMsg.getFrom().getLastName());
 
@@ -96,7 +102,7 @@ public class FillingProfileHandlers implements InputMessageHandler {
             }
         }
 
-        userDataCache.saveTelegramUser(chatId, profileData);
+        telegramUserService.saveUser(profileData);
 
         return replyToUser;
     }

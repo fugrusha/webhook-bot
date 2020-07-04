@@ -5,6 +5,7 @@ import com.telbot.backend.cache.UserDataCache;
 import com.telbot.backend.domain.TelegramUser;
 import com.telbot.backend.service.CalendarKeyboardService;
 import com.telbot.backend.service.ReplyMessageService;
+import com.telbot.backend.service.TelegramUserService;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class CalendarCallbackHandler implements CallbackQueryHandler {
 
     @Autowired
     private UserDataCache userDataCache;
+
+    @Autowired
+    private TelegramUserService telegramUserService;
 
     @Autowired
     private CalendarKeyboardService calendarKeyboardService;
@@ -58,8 +62,9 @@ public class CalendarCallbackHandler implements CallbackQueryHandler {
             callbackAnswer = getNewCalendarKeyboard(buttonQuery, date);
         } else {
             LocalDate date = parseDate(usersInput);
-            TelegramUser profileData = userDataCache.getTelegramUser(chatId);
+            TelegramUser profileData = telegramUserService.getByChatId(chatId);
             profileData.setApplicationDate(date);
+            telegramUserService.saveUser(profileData);
 
             userDataCache.setNewBotState(chatId, BotState.ASK_EMAIL);
             callbackAnswer = messageService.getReplyMessage(chatId, "reply.askEmail");

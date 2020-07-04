@@ -6,6 +6,7 @@ import com.telbot.backend.domain.TelegramUser;
 import com.telbot.backend.service.ApplicationSenderService;
 import com.telbot.backend.service.KeyboardFactoryService;
 import com.telbot.backend.service.ReplyMessageService;
+import com.telbot.backend.service.TelegramUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -20,6 +21,9 @@ public class PhoneNumberHandler {
     private UserDataCache userDataCache;
 
     @Autowired
+    private TelegramUserService telegramUserService;
+
+    @Autowired
     private ReplyMessageService messageService;
 
     @Autowired
@@ -32,7 +36,7 @@ public class PhoneNumberHandler {
         Contact contact = inputMsg.getContact();
         long chatId = inputMsg.getChatId();
 
-        TelegramUser profileData = userDataCache.getTelegramUser(chatId);
+        TelegramUser profileData = telegramUserService.getByChatId(chatId);
 
         profileData.setPhone(contact.getPhoneNumber());
         profileData.setName(contact.getFirstName());
@@ -42,8 +46,8 @@ public class PhoneNumberHandler {
         replyToUser.setReplyMarkup(keyboardFactory.getMainMenuKeyboard());
 
         userDataCache.setNewBotState(chatId, BotState.SHOW_MAIN_MENU);
-        userDataCache.saveTelegramUser(chatId, profileData);
 
+        telegramUserService.saveUser(profileData);
         applicationSenderService.sendToChannel(profileData);
 
         return replyToUser;
