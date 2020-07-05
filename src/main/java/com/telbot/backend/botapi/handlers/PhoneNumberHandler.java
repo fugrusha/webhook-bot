@@ -48,7 +48,7 @@ public class PhoneNumberHandler {
         userDataCache.setNewBotState(chatId, BotState.SHOW_MAIN_MENU);
 
         telegramUserService.saveUser(profileData);
-        applicationSenderService.sendToChannel(profileData);
+        applicationSenderService.informAboutNewApplication(profileData);
 
         // create visit
         visitService.createVisit(profileData.getLastDate(), profileData.getLastTime(), profileData.getChatId());

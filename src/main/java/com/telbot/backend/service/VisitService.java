@@ -20,6 +20,9 @@ public class VisitService {
     @Autowired
     private VisitRepository visitRepository;
 
+    @Autowired
+    private ApplicationSenderService applicationSenderService;
+
     public Visit createVisit(LocalDate date, LocalTime time, long chatId) {
         Visit visit = new Visit();
         visit.setDate(date);
@@ -42,6 +45,8 @@ public class VisitService {
         optionalVisit.ifPresent(v -> {
             v.setStatus(VisitStatus.CANCELLED);
             visitRepository.save(v);
+
+            applicationSenderService.informAboutCancelling(v);
         });
     }
 

@@ -96,7 +96,7 @@ public class FillingProfileHandlers implements InputMessageHandler {
 
                 userDataCache.setNewBotState(chatId, BotState.SHOW_MAIN_MENU);
 
-                applicationSenderService.sendToChannel(profileData);
+                applicationSenderService.informAboutNewApplication(profileData);
                 visitService.createVisit(profileData.getLastDate(), profileData.getLastTime(), profileData.getChatId());
             } else {
                 replyToUser = messageService.getReplyMessage(chatId, "reply.askRepeatPhone");
