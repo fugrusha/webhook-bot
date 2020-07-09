@@ -51,7 +51,7 @@ public class PhoneNumberHandler {
         applicationSenderService.informAboutNewApplication(profileData);
 
         // create visit
-        visitService.createVisit(profileData.getLastDate(), profileData.getLastTime(), profileData.getChatId());
+        visitService.createVisit(profileData.getLastDate(), profileData.getChatId());
 
         return replyToUser;
     }

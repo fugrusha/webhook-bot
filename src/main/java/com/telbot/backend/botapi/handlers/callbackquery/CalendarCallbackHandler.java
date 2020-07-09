@@ -7,6 +7,7 @@ import com.telbot.backend.service.CalendarKeyboardService;
 import com.telbot.backend.service.KeyboardFactoryService;
 import com.telbot.backend.service.ReplyMessageService;
 import com.telbot.backend.service.TelegramUserService;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,16 +58,16 @@ public class CalendarCallbackHandler implements CallbackQueryHandler {
             callbackAnswer = getAnswerCallbackQuery("Выберите дату", true, buttonQuery);
         } else if (NEXT_MONTH.toString().equals(usersInput)) {
             String dateString = buttonQuery.getData().split(" ")[2];
-            LocalDate date = parseDate(dateString);
+            DateTime date = parseDate(dateString);
 
-            callbackAnswer = getNewCalendarKeyboard(buttonQuery, date);
+            callbackAnswer = getNewCalendarKeyboard(buttonQuery, date.toLocalDate());
         } else if (PREVIOUS_MONTH.toString().equals(usersInput)) {
             String dateString = buttonQuery.getData().split(" ")[2];
-            LocalDate date = parseDate(dateString);
+            DateTime date = parseDate(dateString);
 
-            callbackAnswer = getNewCalendarKeyboard(buttonQuery, date);
+            callbackAnswer = getNewCalendarKeyboard(buttonQuery, date.toLocalDate());
         } else {
-            LocalDate date = parseDate(usersInput);
+            DateTime date = parseDate(usersInput);
             TelegramUser profileData = telegramUserService.getByChatId(chatId);
             profileData.setLastDate(date);
             telegramUserService.saveUser(profileData);
@@ -81,8 +82,8 @@ public class CalendarCallbackHandler implements CallbackQueryHandler {
         return callbackAnswer;
     }
 
-    private LocalDate parseDate(String usersInput) {
-        return LocalDate.parse(usersInput, DateTimeFormat.forPattern("YYYY-MM-dd"));
+    private DateTime parseDate(String usersInput) {
+        return DateTime.parse(usersInput, DateTimeFormat.forPattern("YYYY-MM-dd")).withTimeAtStartOfDay();
     }
 
     private EditMessageReplyMarkup getNewCalendarKeyboard(CallbackQuery buttonQuery, LocalDate date) {

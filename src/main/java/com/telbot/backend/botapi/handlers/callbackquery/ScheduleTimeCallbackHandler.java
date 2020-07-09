@@ -43,8 +43,8 @@ public class ScheduleTimeCallbackHandler implements CallbackQueryHandler {
 
         TelegramUser profileData = telegramUserService.getByChatId(chatId);
 
-        DateTime visitDate = profileData.getLastDate().toDateTime(LocalTime.MIDNIGHT);
-        profileData.setLastTime(visitDate.plusHours(time.getHourOfDay()));
+        DateTime visitDate = profileData.getLastDate().plusHours(time.getHourOfDay());
+        profileData.setLastDate(visitDate);
         telegramUserService.saveUser(profileData);
 
         userDataCache.setNewBotState(chatId, BotState.ASK_EMAIL);

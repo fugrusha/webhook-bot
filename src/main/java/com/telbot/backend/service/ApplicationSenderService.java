@@ -24,8 +24,7 @@ public class ApplicationSenderService {
         sb.append("*Surname:* ").append(userProfile.getLastName()).append("\n");
         sb.append("*Phone:* ").append(userProfile.getPhone()).append("\n");
         sb.append("*Email:* ").append(userProfile.getEmail()).append("\n");
-        sb.append("*Date:* ").append(userProfile.getLastDate()).append("\n");
-        sb.append("*Time:* ").append(userProfile.getLastTime().getHourOfDay());
+        sb.append("*Date:* ").append(userProfile.getLastDate().toDate());
 
         messageService.sendMessage(channelName, sb.toString());
     }
@@ -35,8 +34,7 @@ public class ApplicationSenderService {
         StringBuilder sb = new StringBuilder();
         sb.append("*User cancelled application!*\n\n");
         sb.append("*User ID:* ").append(visit.getChatId()).append("\n");
-        sb.append("*Date:* ").append(visit.getDate()).append("\n");
-        sb.append("*Time:* ").append(visit.getTime()).append("\n");
+        sb.append("*Date, time:* ").append(visit.getDate().toDate());
 
         messageService.sendMessage(channelName, sb.toString());
     }

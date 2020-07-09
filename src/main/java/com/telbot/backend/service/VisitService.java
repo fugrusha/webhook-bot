@@ -4,7 +4,6 @@ import com.telbot.backend.domain.Visit;
 import com.telbot.backend.domain.VisitStatus;
 import com.telbot.backend.repository.VisitRepository;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +21,9 @@ public class VisitService {
     @Autowired
     private ApplicationSenderService applicationSenderService;
 
-    public Visit createVisit(LocalDate date, DateTime time, long chatId) {
+    public Visit createVisit(DateTime date, long chatId) {
         Visit visit = new Visit();
         visit.setDate(date);
-        visit.setTime(time);
         visit.setChatId(chatId);
         visit.setStatus(VisitStatus.SCHEDULED);
 
