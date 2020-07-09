@@ -25,7 +25,7 @@ public class ApplicationSenderService {
         sb.append("*Phone:* ").append(userProfile.getPhone()).append("\n");
         sb.append("*Email:* ").append(userProfile.getEmail()).append("\n");
         sb.append("*Date:* ").append(userProfile.getLastDate()).append("\n");
-        sb.append("*Time:* ").append(userProfile.getLastTime());
+        sb.append("*Time:* ").append(userProfile.getLastTime().getHourOfDay());
 
         messageService.sendMessage(channelName, sb.toString());
     }

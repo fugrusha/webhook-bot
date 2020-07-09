@@ -63,7 +63,7 @@ public class MyVisitsHandler implements InputMessageHandler {
                 Visit visit = userVisits.get(i);
 
                 SendMessage visitInfoMessage = messageService.getReplyMessage(chatId, "reply.visit",
-                        i + 1, visit.getDate(), visit.getTime(),
+                        i + 1, visit.getDate(), visit.getTime().getHourOfDay(),
                         visitService.getLocalizedStatus(visit.getStatus()));
 
                 if (visit.getStatus().equals(VisitStatus.SCHEDULED)) {

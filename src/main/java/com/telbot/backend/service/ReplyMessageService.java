@@ -42,7 +42,7 @@ public class ReplyMessageService {
     }
 
     public BotApiMethod getWarningReplyMessage(long chatId, String replyMessage) {
-        return new SendMessage(chatId, replyMessage);
+        return new SendMessage(chatId, localeMessageService.getMessage(replyMessage));
     }
 
     public void sendMessage(String chatId, String message) {

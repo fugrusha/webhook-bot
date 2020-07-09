@@ -3,13 +3,12 @@ package com.telbot.backend.service;
 import com.telbot.backend.domain.Visit;
 import com.telbot.backend.domain.VisitStatus;
 import com.telbot.backend.repository.VisitRepository;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class VisitService {
@@ -23,7 +22,7 @@ public class VisitService {
     @Autowired
     private ApplicationSenderService applicationSenderService;
 
-    public Visit createVisit(LocalDate date, LocalTime time, long chatId) {
+    public Visit createVisit(LocalDate date, DateTime time, long chatId) {
         Visit visit = new Visit();
         visit.setDate(date);
         visit.setTime(time);
@@ -40,14 +39,12 @@ public class VisitService {
     }
 
     public void cancelVisit(String id) {
-        Optional<Visit> optionalVisit = visitRepository.findById(id);
+        Visit visit = visitRepository.findById(id).get();
 
-        optionalVisit.ifPresent(v -> {
-            v.setStatus(VisitStatus.CANCELLED);
-            visitRepository.save(v);
+        visit.setStatus(VisitStatus.CANCELLED);
+        visitRepository.save(visit);
 
-            applicationSenderService.informAboutCancelling(v);
-        });
+        applicationSenderService.informAboutCancelling(visit);
     }
 
     public String getLocalizedStatus(VisitStatus status) {

@@ -2,8 +2,8 @@ package com.telbot.backend.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,7 +18,7 @@ public class Visit {
 
     private LocalDate date;
 
-    private LocalTime time;
+    private DateTime time;
 
     private VisitStatus status;
 

@@ -2,8 +2,8 @@ package com.telbot.backend.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -29,5 +29,5 @@ public class TelegramUser {
 
     private LocalDate lastDate;
 
-    private LocalTime lastTime;
+    private DateTime lastTime;
 }

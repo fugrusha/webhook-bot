@@ -104,4 +104,45 @@ public class KeyboardFactoryService {
 
         return inlineKeyboardMarkup;
     }
+
+    public InlineKeyboardMarkup getChooseTimeKeyboard() {
+        String time1 = "10:00";
+        String time2 = "12:00";
+        String time3 = "14:00";
+        String time4 = "16:00";
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+
+        InlineKeyboardButton button1 = new InlineKeyboardButton()
+                .setText(time1)
+                .setCallbackData(CallbackQueryType.SCHEDULE_TIME.toString() + " " + time1);
+
+        InlineKeyboardButton button2 = new InlineKeyboardButton()
+                .setText(time2)
+                .setCallbackData(CallbackQueryType.SCHEDULE_TIME.toString() + " " + time2);
+
+        InlineKeyboardButton button3 = new InlineKeyboardButton()
+                .setText(time3)
+                .setCallbackData(CallbackQueryType.SCHEDULE_TIME.toString() + " " + time3);
+
+        InlineKeyboardButton button4 = new InlineKeyboardButton()
+                .setText(time4)
+                .setCallbackData(CallbackQueryType.SCHEDULE_TIME.toString() + " " + time4);
+
+        List<InlineKeyboardButton> row1 = new ArrayList<>();
+        row1.add(button1);
+        row1.add(button2);
+
+        List<InlineKeyboardButton> row2 = new ArrayList<>();
+        row2.add(button3);
+        row2.add(button4);
+
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(row1);
+        rowList.add(row2);
+
+        inlineKeyboardMarkup.setKeyboard(rowList);
+
+        return inlineKeyboardMarkup;
+    }
 }

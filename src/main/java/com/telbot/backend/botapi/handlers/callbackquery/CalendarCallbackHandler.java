@@ -4,6 +4,7 @@ import com.telbot.backend.botapi.BotState;
 import com.telbot.backend.cache.UserDataCache;
 import com.telbot.backend.domain.TelegramUser;
 import com.telbot.backend.service.CalendarKeyboardService;
+import com.telbot.backend.service.KeyboardFactoryService;
 import com.telbot.backend.service.ReplyMessageService;
 import com.telbot.backend.service.TelegramUserService;
 import org.joda.time.LocalDate;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
@@ -31,6 +33,9 @@ public class CalendarCallbackHandler implements CallbackQueryHandler {
 
     @Autowired
     private CalendarKeyboardService calendarKeyboardService;
+
+    @Autowired
+    private KeyboardFactoryService keyboardFactory;
 
     @Override
     public BotApiMethod<?> handleCallbackQuery(CallbackQuery callbackQuery) {
@@ -66,8 +71,11 @@ public class CalendarCallbackHandler implements CallbackQueryHandler {
             profileData.setLastDate(date);
             telegramUserService.saveUser(profileData);
 
-            userDataCache.setNewBotState(chatId, BotState.ASK_EMAIL);
-            callbackAnswer = messageService.getReplyMessage(chatId, "reply.askEmail");
+            userDataCache.setNewBotState(chatId, BotState.ASK_TIME);
+            SendMessage reply = messageService.getReplyMessage(chatId, "reply.askTime", date);
+            reply.setReplyMarkup(keyboardFactory.getChooseTimeKeyboard());
+
+            return reply;
         }
 
         return callbackAnswer;
