@@ -73,7 +73,7 @@ public class CalendarCallbackHandler implements CallbackQueryHandler {
             telegramUserService.saveUser(profileData);
 
             userDataCache.setNewBotState(chatId, BotState.ASK_TIME);
-            SendMessage reply = messageService.getReplyMessage(chatId, "reply.askTime", date);
+            SendMessage reply = messageService.getReplyMessage(chatId, "reply.askTime", date.toLocalDate());
             reply.setReplyMarkup(keyboardFactory.getChooseTimeKeyboard());
 
             return reply;

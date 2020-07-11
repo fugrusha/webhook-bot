@@ -3,13 +3,17 @@ package com.telbot.backend.service;
 import com.telbot.backend.domain.Visit;
 import com.telbot.backend.domain.VisitStatus;
 import com.telbot.backend.repository.VisitRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class VisitService {
 
     @Autowired
@@ -27,8 +31,9 @@ public class VisitService {
         visit.setChatId(chatId);
         visit.setStatus(VisitStatus.SCHEDULED);
 
-        visitRepository.save(visit);
+        visit = visitRepository.save(visit);
 
+        log.info("New visit {} from user {} was created", visit.getId(), chatId);
         return visit;
     }
 
@@ -41,6 +46,8 @@ public class VisitService {
 
         visit.setStatus(VisitStatus.CANCELLED);
         visitRepository.save(visit);
+
+        log.info("Visit {} from user {} was cancelled", visit.getId(), visit.getChatId());
 
         applicationSenderService.informAboutCancelling(visit);
     }
@@ -55,6 +62,22 @@ public class VisitService {
                 return messageService.getReplyText("visit.status.cancelled");
             default:
                 return messageService.getReplyText("visit.status.undefined");
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void informAboutTomorrowVisit(String id) {
+        Visit visit = visitRepository.findById(id).get();
+
+        DateTime visitDate = visit.getDate();
+        DateTime today = DateTime.now().withTimeAtStartOfDay();
+        DateTime dayAfterTomorrow = today.plusDays(2);
+
+        if (visitDate.isAfter(today) && visitDate.isBefore(dayAfterTomorrow)) {
+            String message = messageService.getReplyText("visit.inform.message", visitDate.toDate());
+            messageService.sendMessage(String.valueOf(visit.getChatId()), message);
+
+            log.info("User {} was informed about visit {}", visit.getChatId(), visit.getId());
         }
     }
 }

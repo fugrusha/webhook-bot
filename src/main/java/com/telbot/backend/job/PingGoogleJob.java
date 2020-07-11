@@ -27,8 +27,7 @@ public class PingGoogleJob {
 
             connection.disconnect();
         } catch (IOException e) {
-            log.error("Ping FAILED");
-            e.printStackTrace();
+            log.error("Ping FAILED: {}", e.getMessage());
         }
     }
 }
