@@ -37,6 +37,8 @@ public class BotStateContext {
         switch (botState) {
             case ASK_EMAIL:
             case ASK_PHONE:
+            case ASK_DATE:
+            case ASK_TIME:
             case FINISH_APPLICATION:
                 return true;
             default:

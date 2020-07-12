@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -65,10 +63,7 @@ public class VisitService {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void informAboutTomorrowVisit(String id) {
-        Visit visit = visitRepository.findById(id).get();
-
+    public void informAboutTomorrowVisit(Visit visit) {
         DateTime visitDate = visit.getDate();
         DateTime today = DateTime.now().withTimeAtStartOfDay();
         DateTime dayAfterTomorrow = today.plusDays(2);

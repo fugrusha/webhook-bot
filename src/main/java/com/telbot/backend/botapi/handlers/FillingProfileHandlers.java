@@ -63,7 +63,7 @@ public class FillingProfileHandlers implements InputMessageHandler {
 
         BotState botState = userDataCache.getCurrentBotState(chatId);
 
-        SendMessage replyToUser = null;
+        SendMessage replyToUser = messageService.getReplyMessage(chatId, "reply.default");
 
         if (botState.equals(BotState.ASK_DATE)) {
             profileData.setName(inputMsg.getFrom().getFirstName());
@@ -71,6 +71,11 @@ public class FillingProfileHandlers implements InputMessageHandler {
 
             replyToUser = messageService.getReplyMessage(chatId, "reply.askDate");
             replyToUser.setReplyMarkup(calendarKeyboardService.generateCalendarKeyboard(LocalDate.now()));
+        }
+
+        if (botState.equals(BotState.ASK_TIME)) {
+            replyToUser = messageService.getReplyMessage(chatId, "reply.askTimeRepeat");
+            replyToUser.setReplyMarkup(keyboardFactory.getChooseTimeKeyboard());
         }
 
         if (botState.equals(BotState.ASK_EMAIL)) {
