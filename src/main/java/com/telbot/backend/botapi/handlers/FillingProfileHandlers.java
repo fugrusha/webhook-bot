@@ -17,6 +17,12 @@ public class FillingProfileHandlers implements InputMessageHandler {
     private UserDataCache userDataCache;
 
     @Autowired
+    private TelegramUserService telegramUserService;
+
+    @Autowired
+    private VisitService visitService;
+
+    @Autowired
     private ReplyMessageService messageService;
 
     @Autowired
@@ -49,19 +55,27 @@ public class FillingProfileHandlers implements InputMessageHandler {
         String usersAnswer = inputMsg.getText();
         long chatId = inputMsg.getChatId();
 
-        TelegramUser profileData = userDataCache.getTelegramUser(chatId);
+        TelegramUser profileData = telegramUserService.getByChatId(chatId);
+
+        if (profileData == null) {
+            profileData = telegramUserService.createUser(inputMsg.getChatId());
+        }
 
         BotState botState = userDataCache.getCurrentBotState(chatId);
 
-        SendMessage replyToUser = null;
+        SendMessage replyToUser = messageService.getReplyMessage(chatId, "reply.default");
 
         if (botState.equals(BotState.ASK_DATE)) {
-            profileData.setChatId(inputMsg.getChatId());
             profileData.setName(inputMsg.getFrom().getFirstName());
             profileData.setLastName(inputMsg.getFrom().getLastName());
 
             replyToUser = messageService.getReplyMessage(chatId, "reply.askDate");
             replyToUser.setReplyMarkup(calendarKeyboardService.generateCalendarKeyboard(LocalDate.now()));
+        }
+
+        if (botState.equals(BotState.ASK_TIME)) {
+            replyToUser = messageService.getReplyMessage(chatId, "reply.askTimeRepeat");
+            replyToUser.setReplyMarkup(keyboardFactory.getChooseTimeKeyboard());
         }
 
         if (botState.equals(BotState.ASK_EMAIL)) {
@@ -87,7 +101,8 @@ public class FillingProfileHandlers implements InputMessageHandler {
 
                 userDataCache.setNewBotState(chatId, BotState.SHOW_MAIN_MENU);
 
-                applicationSenderService.sendToChannel(profileData);
+                applicationSenderService.informAboutNewApplication(profileData);
+                visitService.createVisit(profileData.getLastDate(), profileData.getChatId());
             } else {
                 replyToUser = messageService.getReplyMessage(chatId, "reply.askRepeatPhone");
                 replyToUser.setReplyMarkup(keyboardFactory.getRequestContactKeyboard());
@@ -96,7 +111,7 @@ public class FillingProfileHandlers implements InputMessageHandler {
             }
         }
 
-        userDataCache.saveTelegramUser(chatId, profileData);
+        telegramUserService.saveUser(profileData);
 
         return replyToUser;
     }

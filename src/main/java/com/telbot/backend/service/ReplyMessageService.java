@@ -42,16 +42,24 @@ public class ReplyMessageService {
     }
 
     public BotApiMethod getWarningReplyMessage(long chatId, String replyMessage) {
-        return new SendMessage(chatId, replyMessage);
+        return new SendMessage(chatId, localeMessageService.getMessage(replyMessage));
     }
 
-    public void sendMessageToChannel(String channelId, String message) {
+    public void sendMessage(String chatId, String message) {
         SendMessage sendMessage = new SendMessage()
-                .setChatId(channelId)
+                .setChatId(chatId)
                 .setText(message)
                 .enableMarkdown(true);
 
         myTelegramBot.send(sendMessage);
+    }
+
+    public String getReplyText(String replyText) {
+        return localeMessageService.getMessage(replyText);
+    }
+
+    public String getReplyText(String replyText, Object... args) {
+        return localeMessageService.getMessage(replyText, args);
     }
 
     //TODO

@@ -52,7 +52,7 @@ public class KeyboardFactoryService {
 
         KeyboardRow row1 = new KeyboardRow();
         row1.add(new KeyboardButton("Запись"));
-        row1.add(new KeyboardButton("Задать вопрос"));
+        row1.add(new KeyboardButton("Мои записи"));
 
         KeyboardRow row2 = new KeyboardRow();
         row2.add(new KeyboardButton("Контакты"));
@@ -85,5 +85,64 @@ public class KeyboardFactoryService {
         replyKeyboardMarkup.setKeyboard(keyboard);
 
         return replyKeyboardMarkup;
+    }
+
+    public InlineKeyboardMarkup getInlineButtonForVisit(String visitId, String buttonText) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+
+        InlineKeyboardButton cancelButton = new InlineKeyboardButton()
+                .setText(buttonText)
+                .setCallbackData(CallbackQueryType.CANCEL_VISIT.toString() + " " + visitId);
+
+        List<InlineKeyboardButton> keyboardRow = new ArrayList<>();
+        keyboardRow.add(cancelButton);
+
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(keyboardRow);
+
+        inlineKeyboardMarkup.setKeyboard(rowList);
+
+        return inlineKeyboardMarkup;
+    }
+
+    public InlineKeyboardMarkup getChooseTimeKeyboard() {
+        String time1 = "10:00";
+        String time2 = "12:00";
+        String time3 = "14:00";
+        String time4 = "16:00";
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+
+        InlineKeyboardButton button1 = new InlineKeyboardButton()
+                .setText(time1)
+                .setCallbackData(CallbackQueryType.SCHEDULE_TIME.toString() + " " + time1);
+
+        InlineKeyboardButton button2 = new InlineKeyboardButton()
+                .setText(time2)
+                .setCallbackData(CallbackQueryType.SCHEDULE_TIME.toString() + " " + time2);
+
+        InlineKeyboardButton button3 = new InlineKeyboardButton()
+                .setText(time3)
+                .setCallbackData(CallbackQueryType.SCHEDULE_TIME.toString() + " " + time3);
+
+        InlineKeyboardButton button4 = new InlineKeyboardButton()
+                .setText(time4)
+                .setCallbackData(CallbackQueryType.SCHEDULE_TIME.toString() + " " + time4);
+
+        List<InlineKeyboardButton> row1 = new ArrayList<>();
+        row1.add(button1);
+        row1.add(button2);
+
+        List<InlineKeyboardButton> row2 = new ArrayList<>();
+        row2.add(button3);
+        row2.add(button4);
+
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(row1);
+        rowList.add(row2);
+
+        inlineKeyboardMarkup.setKeyboard(rowList);
+
+        return inlineKeyboardMarkup;
     }
 }

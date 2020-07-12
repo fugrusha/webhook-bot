@@ -4,13 +4,17 @@ import com.telbot.backend.botapi.BotState;
 import com.telbot.backend.cache.UserDataCache;
 import com.telbot.backend.domain.TelegramUser;
 import com.telbot.backend.service.CalendarKeyboardService;
+import com.telbot.backend.service.KeyboardFactoryService;
 import com.telbot.backend.service.ReplyMessageService;
+import com.telbot.backend.service.TelegramUserService;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
@@ -26,7 +30,13 @@ public class CalendarCallbackHandler implements CallbackQueryHandler {
     private UserDataCache userDataCache;
 
     @Autowired
+    private TelegramUserService telegramUserService;
+
+    @Autowired
     private CalendarKeyboardService calendarKeyboardService;
+
+    @Autowired
+    private KeyboardFactoryService keyboardFactory;
 
     @Override
     public BotApiMethod<?> handleCallbackQuery(CallbackQuery callbackQuery) {
@@ -48,28 +58,32 @@ public class CalendarCallbackHandler implements CallbackQueryHandler {
             callbackAnswer = getAnswerCallbackQuery("Выберите дату", true, buttonQuery);
         } else if (NEXT_MONTH.toString().equals(usersInput)) {
             String dateString = buttonQuery.getData().split(" ")[2];
-            LocalDate date = parseDate(dateString);
+            DateTime date = parseDate(dateString);
 
-            callbackAnswer = getNewCalendarKeyboard(buttonQuery, date);
+            callbackAnswer = getNewCalendarKeyboard(buttonQuery, date.toLocalDate());
         } else if (PREVIOUS_MONTH.toString().equals(usersInput)) {
             String dateString = buttonQuery.getData().split(" ")[2];
-            LocalDate date = parseDate(dateString);
+            DateTime date = parseDate(dateString);
 
-            callbackAnswer = getNewCalendarKeyboard(buttonQuery, date);
+            callbackAnswer = getNewCalendarKeyboard(buttonQuery, date.toLocalDate());
         } else {
-            LocalDate date = parseDate(usersInput);
-            TelegramUser profileData = userDataCache.getTelegramUser(chatId);
-            profileData.setApplicationDate(date);
+            DateTime date = parseDate(usersInput);
+            TelegramUser profileData = telegramUserService.getByChatId(chatId);
+            profileData.setLastDate(date);
+            telegramUserService.saveUser(profileData);
 
-            userDataCache.setNewBotState(chatId, BotState.ASK_EMAIL);
-            callbackAnswer = messageService.getReplyMessage(chatId, "reply.askEmail");
+            userDataCache.setNewBotState(chatId, BotState.ASK_TIME);
+            SendMessage reply = messageService.getReplyMessage(chatId, "reply.askTime", date.toLocalDate());
+            reply.setReplyMarkup(keyboardFactory.getChooseTimeKeyboard());
+
+            return reply;
         }
 
         return callbackAnswer;
     }
 
-    private LocalDate parseDate(String usersInput) {
-        return LocalDate.parse(usersInput, DateTimeFormat.forPattern("YYYY-MM-dd"));
+    private DateTime parseDate(String usersInput) {
+        return DateTime.parse(usersInput, DateTimeFormat.forPattern("YYYY-MM-dd")).withTimeAtStartOfDay();
     }
 
     private EditMessageReplyMarkup getNewCalendarKeyboard(CallbackQuery buttonQuery, LocalDate date) {

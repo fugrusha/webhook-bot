@@ -5,5 +5,7 @@ public enum CallbackQueryType {
     IGNORE_CALLBACK,
     CALENDAR_CALLBACK,
     NEXT_MONTH,
-    PREVIOUS_MONTH;
+    PREVIOUS_MONTH,
+    SCHEDULE_TIME,
+    CANCEL_VISIT;
 }

@@ -7,9 +7,10 @@ public enum BotState {
     ASK_EMAIL,
     ASK_PHONE,
     ASK_DATE,
+    ASK_TIME,
     FILLING_PROFILE,
+    MY_VISITS,
     SHOW_HELP_MENU,
     SHOW_MAIN_MENU,
-    HAVE_A_QUESTION,
     SHOW_CONTACTS
 }
